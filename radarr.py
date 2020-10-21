@@ -37,6 +37,11 @@ class RadarrAPI():
         lookup_output['monitored'] = True
         lookup_output['addOptions'] = {'searchForMovie':download}
         response = self.rq_session.post(full_endpoint_url, json = lookup_output )
+        try:
+            if "already been added" in response.json()[0]['errorMessage']:
+                return response.json()[0]['errorMessage']
+        except:
+            pass
         response.raise_for_status()
         if response.text:
             return json.loads( response.text )

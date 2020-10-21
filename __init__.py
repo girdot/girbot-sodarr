@@ -32,14 +32,16 @@ async def movie(ctx, movie):
         if not movie:
             await ctx.send("No movie found for ID: %s" % imdb_id)
         else:
+            response = r.add_movie( movie )
             try:
-                response = r.add_movie( movie )
-                if not response:
-                    await ctx.send( "There was a problem adding your movie" )
+                if "already been added" in response:
+                    await ctx.send( "Movie '%s' is _probably_ already on the plex" % movie['title'])
+                elif not response:
+                    await ctx.send( "There was a problem adding movie '%s'" % movie['title'] )
                 else:
-                    await ctx.send( "Movie successfully added" )
+                    await ctx.send( "Movie '%s' successfully added" % movie['title'] )
             except:
-                await ctx.send( "There was a problem adding your movie" )
+                await ctx.send( "There was a problem adding movie '%s'" % movie['title'])
 
 @client.command( "tv" )
 async def tv(ctx, tvdb_series_id):
@@ -50,9 +52,11 @@ async def tv(ctx, tvdb_series_id):
             await ctx.send( "No series found for ID: %s" % tvdb_series_id )
         else:
             response = s.add_series( series )
-            if not response:
-                await ctx.send( "There was a problem adding your series" )
+            if "already been added" in response:
+                await ctx.send( "Tv show '%s' is _probably_ already on the plex" % series['title'])
+            elif not response:
+                await ctx.send( "There was a problem adding series %s" % series['title'] )
             else:
-                await ctx.send( "Series successfully added" )
+                await ctx.send( "Series '%s' successfully added" % series['title'] )
     except:
-        await ctx.send("There was a probelm adding your series")
+        await ctx.send("There was a probelm adding series %s" % series['title'])

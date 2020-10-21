@@ -30,6 +30,11 @@ class SonarrAPI():
         lookup_output['seasonFolder'] = True
         lookup_output['addOptions'] = {'searchForMissingEpisodes':download}
         response = self.rq_session.post(full_endpoint_url, json = lookup_output )
+        try:
+            if "already been added" in response.json()[0]['errorMessage']:
+                return response.json()[0]['errorMessage']
+        except:
+            pass
         response.raise_for_status()
         if response.text:
             return json.loads( response.text )
