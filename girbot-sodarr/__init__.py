@@ -1,4 +1,4 @@
-from bot import client
+from girbot import client
 from .radarr import RadarrAPI
 from .sonarr import SonarrAPI
 import re
